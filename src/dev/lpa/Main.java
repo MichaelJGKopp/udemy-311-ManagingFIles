@@ -2,6 +2,8 @@ package dev.lpa;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,7 +58,7 @@ public class Main {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    
+
 //    try (BufferedReader reader = new BufferedReader(
 //      new FileReader("files//student-activity.json"));  // // and / the same
 //         PrintWriter writer = new PrintWriter("students-backup.json")) {
@@ -77,9 +79,37 @@ public class Main {
     
     Path jsonPath = Path.of("USPopulationByState.txt");
     try (var reader = new InputStreamReader(uri.toURL().openStream());
-      var writer = Files.newBufferedWriter(jsonPath)
+         var writer = Files.newBufferedWriter(jsonPath)
     ) {
       reader.transferTo(writer);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    
+    try (var reader = new InputStreamReader(uri.toURL().openStream());
+         var printWriter = new PrintWriter("USPopulationByState.csv")
+    ) {
+      reader.transferTo(new Writer() {
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+          
+          String jsonString = new String(cbuf, off, len);
+          jsonString = jsonString
+                         .replaceAll("(],)?]?", "")
+                         .replace('[', ' ').trim();
+          printWriter.write(jsonString);
+        }
+        
+        @Override
+        public void flush() throws IOException {
+          printWriter.flush();
+        }
+        
+        @Override
+        public void close() throws IOException {
+          printWriter.close();
+        }
+      });
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
