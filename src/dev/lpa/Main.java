@@ -44,6 +44,11 @@ public class Main {
     Path fileDir = Path.of("files");
     Path resourceDir = Path.of("resources");
     try {
+//      if (Files.exists(resourceDir)) {
+//        Files.delete(resourceDir);
+//      }
+//      Files.deleteIfExists(resourceDir);
+      recurseDelete(resourceDir);
       recurseCopy(fileDir, resourceDir); // shallow copy
       System.out.println("Directory copied to " + resourceDir);
     } catch (IOException e) {
@@ -66,5 +71,22 @@ public class Main {
           });
       }
     }
+  }
+  
+  public static void recurseDelete(Path target) throws IOException {
+    
+    if (Files.isDirectory(target)) {
+      try (var children = Files.list(target)) {
+        children.toList().forEach(
+          p -> {
+            try {
+              Main.recurseDelete(p);
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          });
+      }
+    }
+    Files.delete(target);
   }
 }
