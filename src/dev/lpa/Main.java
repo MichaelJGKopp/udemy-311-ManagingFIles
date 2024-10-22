@@ -3,6 +3,7 @@ package dev.lpa;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class Main {
   
@@ -52,7 +53,7 @@ public class Main {
   
   public static void recurseCopy(Path source, Path target) throws IOException {
     
-    Files.copy(source, target);
+    Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
     if (Files.isDirectory(source)) {
       try (var children = Files.list(source)) {
         children.toList().forEach(
