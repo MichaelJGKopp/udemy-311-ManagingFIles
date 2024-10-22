@@ -31,14 +31,22 @@ public class Main {
 //      throw new RuntimeException(e);
 //    }
     
+//    Path fileDir = Path.of("files");
+//    Path resourceDir = Path.of("resources");
+//    try {
+//      Files.move(fileDir, resourceDir);
+//      System.out.println("Directory renamed.");
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+    
     Path fileDir = Path.of("files");
     Path resourceDir = Path.of("resources");
     try {
-      Files.move(fileDir, resourceDir);
-      System.out.println("Directory renamed.");
+      Files.copy(fileDir, resourceDir); // shallow copy
+      System.out.println("Directory copied to " + resourceDir);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    
   }
 }
