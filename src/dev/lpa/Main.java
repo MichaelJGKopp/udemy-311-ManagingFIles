@@ -20,15 +20,25 @@ public class Main {
 //    Path oldPath = oldFile.toPath();
 //    Path newPath = newFile.toPath();
     
-    Path oldPath = Path.of("students.json");
-    Path newPath = Path.of("files/student-activity.json");
+//    Path oldPath = Path.of("students.json");
+//    Path newPath = Path.of("files/student-activity.json");
+//
+//    try {
+//      Files.createDirectories(newPath.subpath(0, newPath.getNameCount() - 1));
+//      Files.move(oldPath, newPath);
+//      System.out.println(oldPath + " moved (renamed to) --> " + newPath);
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
     
+    Path fileDir = Path.of("files");
+    Path resourceDir = Path.of("resources");
     try {
-      Files.createDirectories(newPath.subpath(0, newPath.getNameCount() - 1));
-      Files.move(oldPath, newPath);
-      System.out.println(oldPath + " moved (renamed to) --> " + newPath);
+      Files.move(fileDir, resourceDir);
+      System.out.println("Directory renamed.");
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    
   }
 }
