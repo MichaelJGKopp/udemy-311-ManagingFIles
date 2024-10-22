@@ -1,9 +1,8 @@
 package dev.lpa;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -58,10 +57,20 @@ public class Main {
       throw new RuntimeException(e);
     }
     
-    try (BufferedReader reader = new BufferedReader(
-      new FileReader("files//student-activity.json"));  // // and / the same
-         PrintWriter writer = new PrintWriter("students-backup.json")) {
-      reader.transferTo(writer);
+//    try (BufferedReader reader = new BufferedReader(
+//      new FileReader("files//student-activity.json"));  // // and / the same
+//         PrintWriter writer = new PrintWriter("students-backup.json")) {
+//      reader.transferTo(writer);
+//    } catch (IOException e) {
+//      throw new RuntimeException(e);
+//    }
+    
+    String urlString =
+      "https://api.census.gov/data/2019/pep/charagegroups?get=NAME,POP&for=state:*";
+    URI uri = URI.create(urlString);
+    try (var urlInputStream = uri.toURL().openStream();
+    ) {
+      urlInputStream.transferTo(System.out);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
