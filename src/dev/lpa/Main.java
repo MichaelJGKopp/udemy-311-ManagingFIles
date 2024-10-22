@@ -1,6 +1,9 @@
 package dev.lpa;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -51,6 +54,14 @@ public class Main {
       recurseDelete(resourceDir);
       recurseCopy(fileDir, resourceDir); // shallow copy
       System.out.println("Directory copied to " + resourceDir);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    
+    try (BufferedReader reader = new BufferedReader(
+      new FileReader("files//student-activity.json"));  // // and / the same
+         PrintWriter writer = new PrintWriter("students-backup.json")) {
+      reader.transferTo(writer);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
