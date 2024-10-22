@@ -7,7 +7,7 @@ import java.nio.file.Path;
 public class Main {
   
   public static void main(String[] args) {
-    
+
 //    File oldFile = new File("students.json");
 //    File newFile = new File("student-activity.json");
 //    if (oldFile.exists()) {
@@ -16,10 +16,10 @@ public class Main {
 //    } else {
 //      System.out.println("File does not exist!");
 //    }
-    
+
 //    Path oldPath = oldFile.toPath();
 //    Path newPath = newFile.toPath();
-    
+
 //    Path oldPath = Path.of("students.json");
 //    Path newPath = Path.of("files/student-activity.json");
 //
@@ -30,7 +30,7 @@ public class Main {
 //    } catch (IOException e) {
 //      throw new RuntimeException(e);
 //    }
-    
+
 //    Path fileDir = Path.of("files");
 //    Path resourceDir = Path.of("resources");
 //    try {
@@ -43,10 +43,27 @@ public class Main {
     Path fileDir = Path.of("files");
     Path resourceDir = Path.of("resources");
     try {
-      Files.copy(fileDir, resourceDir); // shallow copy
+      recurseCopy(fileDir, resourceDir); // shallow copy
       System.out.println("Directory copied to " + resourceDir);
     } catch (IOException e) {
       throw new RuntimeException(e);
+    }
+  }
+  
+  public static void recurseCopy(Path source, Path target) throws IOException {
+    
+    Files.copy(source, target);
+    if (Files.isDirectory(source)) {
+      try (var children = Files.list(source)) {
+        children.toList().forEach(
+          p -> {
+            try {
+              Main.recurseCopy(p, target.resolve(p.getFileName()));
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
+          });
+      }
     }
   }
 }
