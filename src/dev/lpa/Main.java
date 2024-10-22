@@ -74,6 +74,15 @@ public class Main {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    
+    Path jsonPath = Path.of("USPopulationByState.txt");
+    try (var reader = new InputStreamReader(uri.toURL().openStream());
+      var writer = Files.newBufferedWriter(jsonPath)
+    ) {
+      reader.transferTo(writer);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
   
   public static void recurseCopy(Path source, Path target) throws IOException {
